@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator
 
-# Opciones para los campos de elección
+# Opciones de elección
 OPCIONES_RAZA = [
     ("CNH", "Caniche"),
     ("CHH", "Chihuahua"),
@@ -80,9 +80,9 @@ class Adopcion(models.Model):
 
 # Relación entre adopciones y perros
 class DetalleAdopcion(models.Model):
-    adopcion = models.ForeignKey(Adopcion, on_delete=models.CASCADE)
-    perro_adoptado = models.ForeignKey(Perro, on_delete=models.CASCADE)
-    seguimiento = models.TextField(blank=True)
+    adopcion = models.ForeignKey(Adopcion, on_delete=models.CASCADE, related_name='detalles')
+    perro = models.ForeignKey(Perro, on_delete=models.CASCADE, related_name='adopciones')
+    seguimiento_post_adopcion = models.TextField("Seguimiento", blank=True, null=True)
 
     def __str__(self):
-        return f"{self.perro_adoptado.nombre} adoptado por {self.adopcion.interesado.nombre}"
+        return f"{self.perro.nombre} adoptado por {self.adopcion.interesado.nombre} el {self.adopcion.fecha}"
